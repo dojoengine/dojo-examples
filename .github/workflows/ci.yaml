@@ -4,7 +4,7 @@ on:
     merge_group:
     pull_request:
 jobs:
-    check:
+    fmt-check:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
@@ -12,5 +12,10 @@ jobs:
               with:
                   scarb-version: "0.6.2"
             - run: for dir in ./examples/* ; do cd $dir && scarb fmt --check && cd ../..; done;
-            - run: curl -L https://install.dojoengine.org | bash && dojoup
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - run: curl -L https://install.dojoengine.org | bash
+            - run: dojoup
 
