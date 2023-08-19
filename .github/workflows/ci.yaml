@@ -17,6 +17,5 @@ jobs:
         steps:
             - uses: actions/checkout@v3
             - run: curl -L https://install.dojoengine.org | bash 
-            - run: source /home/runner/.bashrc 
-            - run: dojoup
+            - run: source /home/runner/.bashrc && dojoup
 
