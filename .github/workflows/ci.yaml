@@ -12,3 +12,5 @@ jobs:
               with:
                   scarb-version: "0.6.2"
             - run: for dir in ./examples/* ; do cd $dir && scarb fmt --check && cd ../..; done;
+            - run: curl -L https://install.dojoengine.org | bash && dojoup
+
