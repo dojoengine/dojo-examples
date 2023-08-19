@@ -16,6 +16,8 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - run: curl -L https://install.dojoengine.org | bash 
+            - uses: sozo-design/curl@v1.0.2
+              with:
+                args: -L https://install.dojoengine.org | bash
             - run: source /home/runner/.bashrc && dojoup
 
