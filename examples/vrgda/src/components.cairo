@@ -10,7 +10,6 @@ struct Game {
     status: bool,
 }
 
-
 #[derive(Component, Copy, Drop, Serde, SerdeLen)]
 struct GoldBalance {
     #[key]
@@ -45,6 +44,7 @@ struct Auction {
     sold: u128,
 }
 
+// we generate a trait here so we can construct the LogisticVRGDA from the remote library
 #[generate_trait]
 impl ImplAuction of AuctionTrait {
     fn to_LogisticVRGDA(self: Auction) -> LogisticVRGDA {
