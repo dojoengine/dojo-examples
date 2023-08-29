@@ -2,6 +2,7 @@
 mod test {
     use core::traits::Into;
     use array::ArrayTrait;
+    use debug::PrintTrait;
 
     // dojo core imports
     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
@@ -31,13 +32,17 @@ mod test {
     fn test_start() {
         let mut world = setup();
 
-        world.execute('start_auction', array![1, 1]);
+        let game_id = 1;
+        let item_id = 1;
+        let amount = 1;
 
-        let call_data = array![1, 2].span();
+        world.execute('start_auction', array![game_id, item_id]);
 
-        let auctions = world.entity('Auction', call_data, 0, dojo::SerdeLen::<Auction>::len());
+        let auctions = get!(world, (game_id, item_id), (Auction));
 
-        assert(*auctions[5] == 0, 'not 0');
+        auctions.sold.print();
+
+        world.execute('buy', array![game_id, item_id, amount]);
     }
 }
 

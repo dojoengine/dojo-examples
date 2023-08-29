@@ -1,18 +1,38 @@
 #[system]
 mod buy {
+    use core::debug::PrintTrait;
     use array::ArrayTrait;
     use core::traits::Into;
-    use starknet::ContractAddress;
+    use starknet::{ContractAddress, get_block_timestamp};
 
     use cubit::f128::types::fixed::{Fixed, FixedTrait};
     use dojo::world::Context;
-    use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA};
+    use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA, LogisticVRGDATrait};
 
-    use example_vrgda::components::{Auction, GoldBalance};
+    use example_vrgda::components::{Auction, AuctionTrait, GoldBalance};
 
     fn execute(ctx: Context, game_id: u64, item_id: u128, amount: u128) {
-        let auction = get!(ctx.world, (game_id, item_id), Auction);
-        let player_balance = get!(ctx.world, (game_id, ctx.origin), GoldBalance);
+        let mut auction = get!(ctx.world, (game_id, item_id), Auction);
+        let mut player_balance = get!(ctx.world, (game_id, ctx.origin), GoldBalance);
+
+        // convert auction to VRGDA
+        let VRGDA = auction.to_LogisticVRGDA();
+
+        // convert time to fixed point number
+        let current_time: u128 = get_block_timestamp().into();
+        let start_time: u128 = auction.start_time.into();
+        let time_since_start = FixedTrait::new((current_time - start_time), false);
+
+        // convert amount to fixed point number sold
+        let number_sold = FixedTrait::new(auction.sold, false);
+
+        let price = VRGDA.get_vrgda_price(time_since_start, number_sold);
+
+        price.print();
+
+        auction.sold += amount;
+
+        set!(ctx.world, (auction, player_balance));
     }
 }
 
@@ -29,14 +49,16 @@ mod start_auction {
     use dojo::world::Context;
     use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA};
 
-    const _69_42: u128 = 1280572973596917000000;
+    const target_price: u128 = 1000;
     const _0_31: u128 = 5718490662849961000;
     const MAX_SELLABLE: u128 = 9000;
     const _0_0023: u128 = 42427511369531970;
 
     fn execute(ctx: Context, game_id: u64, item_id: u128) {
+        // todo: check if auction already exists
+        // todo: check game exists
         // create fixed point numbers
-        let target_price: felt252 = FixedTrait::new(_69_42, false).into();
+        let target_price: felt252 = FixedTrait::new_unscaled(target_price, false).into();
         let decay_constant: felt252 = FixedTrait::new(_0_31, false).into();
         let max_sellable: felt252 = FixedTrait::new_unscaled(MAX_SELLABLE, false).into();
         let time_scale: felt252 = FixedTrait::new(_0_0023, false).into();
