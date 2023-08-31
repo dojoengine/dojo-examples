@@ -36,10 +36,10 @@ struct Auction {
     game_id: u64,
     #[key]
     item_id: u128,
-    target_price: u128,
-    decay_constant: u128,
-    max_sellable: u128,
-    time_scale: u128,
+    target_price: Fixed,
+    decay_constant: Fixed,
+    max_sellable: Fixed,
+    time_scale: Fixed,
     start_time: u64,
     sold: u128,
 }
@@ -48,12 +48,19 @@ struct Auction {
 #[generate_trait]
 impl ImplAuction of AuctionTrait {
     fn to_LogisticVRGDA(self: Auction) -> LogisticVRGDA {
-        let target_price = FixedTrait::new(self.target_price, false);
-        let decay_constant = FixedTrait::new(self.decay_constant, false);
-        let max_sellable = FixedTrait::new(self.max_sellable, false);
-        let time_scale = FixedTrait::new(self.time_scale, false);
+        let target_price = self.target_price;
+        let decay_constant = self.decay_constant;
+        let max_sellable = self.max_sellable;
+        let time_scale = self.time_scale;
 
         LogisticVRGDA { target_price, decay_constant, max_sellable, time_scale }
     }
 }
 
+
+impl SerdeLenFixed of dojo::serde::SerdeLen<Fixed> {
+    #[inline(always)]
+    fn len() -> usize {
+        2
+    }
+}
