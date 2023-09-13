@@ -10,7 +10,7 @@ jobs:
             - uses: actions/checkout@v3
             - uses: software-mansion/setup-scarb@v1
               with:
-                  scarb-version: "0.6.2"
+                  scarb-version: "0.7.0"
             - run: for dir in ./examples/* ; do cd $dir && scarb fmt --check && cd ../..; done;
     sozo-test:
         runs-on: ubuntu-latest

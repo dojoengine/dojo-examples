@@ -1,7 +1,5 @@
 #[system]
 mod attack {
-    use array::ArrayTrait;
-    use core::traits::Into;
     use starknet::ContractAddress;
     use zeroable::Zeroable;
 
