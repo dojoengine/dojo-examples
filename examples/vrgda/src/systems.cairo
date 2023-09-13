@@ -1,8 +1,6 @@
 #[system]
 mod view_price {
     use core::debug::PrintTrait;
-    use array::ArrayTrait;
-    use core::traits::{Into};
     use starknet::{ContractAddress, get_block_timestamp};
 
     use cubit::f128::types::fixed::{Fixed, FixedTrait};
@@ -32,8 +30,6 @@ mod view_price {
 #[system]
 mod buy {
     use core::debug::PrintTrait;
-    use array::ArrayTrait;
-    use core::traits::{Into};
     use starknet::{ContractAddress, get_block_timestamp};
 
     use cubit::f128::types::fixed::{Fixed, FixedTrait};
@@ -69,8 +65,6 @@ mod buy {
 #[system]
 mod start_auction {
     use array::ArrayTrait;
-    use core::traits::{Into, TryInto};
-    use option::OptionTrait;
     use starknet::{ContractAddress, get_block_timestamp};
 
     use example_vrgda::components::{Auction, GoldBalance};

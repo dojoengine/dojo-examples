@@ -2,7 +2,7 @@ use starknet::ContractAddress;
 use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA};
 use cubit::f128::types::fixed::{Fixed, FixedTrait};
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Game {
     #[key]
     game_id: u64,
@@ -10,7 +10,7 @@ struct Game {
     status: bool,
 }
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Component, Copy, Drop, Serde)]
 struct GoldBalance {
     #[key]
     game_id: u64,
@@ -19,7 +19,7 @@ struct GoldBalance {
     balance: u32,
 }
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Component, Copy, Drop, Serde)]
 struct ItemBalance {
     #[key]
     game_id: u64,
@@ -30,7 +30,7 @@ struct ItemBalance {
     balance: u32,
 }
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Component, Copy, Drop, Serde)]
 struct Auction {
     #[key]
     game_id: u64,
@@ -57,10 +57,3 @@ impl ImplAuction of AuctionTrait {
     }
 }
 
-
-impl SerdeLenFixed of dojo::serde::SerdeLen<Fixed> {
-    #[inline(always)]
-    fn len() -> usize {
-        2
-    }
-}

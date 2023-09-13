@@ -1,11 +1,9 @@
 #[system]
 mod claim_item {
-    use array::ArrayTrait;
-    use core::traits::Into;
     use starknet::ContractAddress;
 
     use dojo::world::Context;
-    use dojo_erc::erc721::systems::erc721_mint;
+    use dojo_erc::erc721::systems::ERC721Mint;
 
     use erc721_example::components::{Player, Item};
 
@@ -17,7 +15,7 @@ mod claim_item {
             item.address.into(), (item.minted + 1).into(), claimant.address.into()
         ];
         // The ERC721 system is invoked here.
-        ctx.world.execute('erc721_mint', calldata);
+        ctx.world.execute('ERC721Mint', calldata);
         // Update the item component.
         item.minted += 1;
         set!(ctx.world, (item));
