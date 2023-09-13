@@ -3,14 +3,6 @@ use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA};
 use cubit::f128::types::fixed::{Fixed, FixedTrait};
 
 #[derive(Component, Copy, Drop, Serde)]
-struct Game {
-    #[key]
-    game_id: u64,
-    start_time: u64,
-    status: bool,
-}
-
-#[derive(Component, Copy, Drop, Serde)]
 struct GoldBalance {
     #[key]
     game_id: u64,
@@ -57,3 +49,14 @@ impl ImplAuction of AuctionTrait {
     }
 }
 
+impl StorageSizeFixed of dojo::StorageSize<Fixed> {
+    #[inline(always)]
+    fn unpacked_size() -> usize {
+        2
+    }
+
+    #[inline(always)]
+    fn packed_size() -> usize {
+        129
+    }
+}

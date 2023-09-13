@@ -1,7 +1,5 @@
 #[cfg(test)]
 mod test {
-    use core::traits::Into;
-    use array::ArrayTrait;
     use debug::PrintTrait;
 
     // dojo core imports
