@@ -1,8 +1,12 @@
+use dojo::world::{IWorldDispatcher, IWorldDispatcherTrait};
+use dojo::database::schema::{Enum, Ty, SchemaIntrospection, serialize_member_type};
+
 use starknet::ContractAddress;
-use dojo::world::{Context, IWorldDispatcher, IWorldDispatcherTrait};
+
+use core::debug::PrintTrait;
 
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Game {
     #[key]
     game_id: u32,
@@ -11,7 +15,7 @@ struct Game {
     winner: ContractAddress,
 }
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Statement {
     #[key]
     game_id: u32,
@@ -24,21 +28,21 @@ struct Statement {
 
 
 trait StatementTrait {
-    fn reset(ref self: Statement, ctx: Context);
+    fn reset(ref self: Statement, world: IWorldDispatcher);
 }
 
 impl StatementImpl of StatementTrait {
-    fn reset(ref self: Statement, ctx: Context) {
-        let mut statement = get!(ctx.world, (self.game_id, self.player_id), (Statement));
+    fn reset(ref self: Statement, world: IWorldDispatcher) {
+        let mut statement = get!(world, (self.game_id, self.player_id), (Statement));
         statement.commit_value = 0;
         statement.reveal_value = Choice::Idle;
         statement.reveal_secret = 0;
-        set!(ctx.world, (statement));
+        set!(world, (statement));
     }
 }
 
 
-#[derive(Copy, Drop, Serde, PartialEq)]
+#[derive(Serde, Copy, Drop, PartialEq)]
 enum Choice {
     Idle,
     Rock,
@@ -74,24 +78,40 @@ impl TryIntoChoiceFelt252 of TryInto<felt252, Choice> {
 }
 
 
-impl ChoiceStorageSize of dojo::StorageSize<Choice> {
-    #[inline(always)]
-    fn unpacked_size() -> usize {
-        1
-    }
-
-    #[inline(always)]
-    fn packed_size() -> usize {
-        252
-    }
-}
-
-
-use debug::PrintTrait;
-
 impl ChoicePrint of PrintTrait<Choice> {
     fn print(self: Choice) {
         let felt: felt252 = self.into();
         felt.print();
     }
 }
+
+
+impl ChoiceSchemaIntrospectionImpl of SchemaIntrospection<Choice> {
+    #[inline(always)]
+    fn size() -> usize {
+        1
+    }
+
+    #[inline(always)]
+    fn layout(ref layout: Array<u8>) {
+        layout.append(8);
+    }
+
+    #[inline(always)]
+    fn ty() -> Ty {
+        Ty::Enum(
+            Enum {
+                name: 'Choice',
+                attrs: array![].span(),
+                children: array![
+                    ('Idle', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('Rock', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('Paper', serialize_member_type(@Ty::Tuple(array![].span()))),
+                    ('Scissor', serialize_member_type(@Ty::Tuple(array![].span()))),
+                ]
+                    .span()
+            }
+        )
+    }
+}
+
