@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Ship {
     #[key]
     player: ContractAddress,
@@ -9,7 +9,7 @@ struct Ship {
     y: u32
 }
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Fleet {
     #[key]
     player: ContractAddress,
