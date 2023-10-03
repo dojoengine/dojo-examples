@@ -1,6 +1,6 @@
 use starknet::ContractAddress;
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Player {
     #[key]
     address: ContractAddress,
@@ -8,12 +8,12 @@ struct Player {
     exp_points: u32,
 }
 
-#[derive(Component, Copy, Drop, Serde, SerdeLen)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Item {
     #[key]
-    address: ContractAddress,
+    id: u32,
     // Experience point required to claim the token.
     exp_required: u32,
     // The amount of items minted so far.  
-    minted: u32,
+    minted: u256
 }
