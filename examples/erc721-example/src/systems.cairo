@@ -6,7 +6,9 @@ mod ItemActions {
 
     use erc721_example::models::{Player, Item};
 
+    #[external(v0)]
     fn claim(
+        self: @ContractState,
         world: IWorldDispatcher, 
         erc721_address: ContractAddress, 
         item_id: u32

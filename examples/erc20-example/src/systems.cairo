@@ -9,7 +9,9 @@ mod ShipActions {
 
     const ONE_TOKEN: u256 = 1_000_000_000_000_000_000; // 1 * 10^18
 
+    #[external(v0)]
     fn attack(
+        self: @ContractState,
         world: IWorldDispatcher,
         erc20_address: ContractAddress,
         attacker: ContractAddress,
