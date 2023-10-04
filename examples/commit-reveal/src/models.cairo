@@ -94,7 +94,7 @@ impl ChoiceSchemaIntrospectionImpl of SchemaIntrospection<Choice> {
 
     #[inline(always)]
     fn layout(ref layout: Array<u8>) {
-        layout.append(252);
+        SchemaIntrospection::<felt252>::layout(ref layout);
     }
 
     #[inline(always)]
