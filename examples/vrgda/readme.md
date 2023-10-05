@@ -10,9 +10,9 @@ This is an incomplete implementation showing how you can use the VRGDA dojo-modu
 In this example we create a system that is responsible to maintaining the state of an VRGDA within a dojo component. This component is stored using a component key, so multiple auctions can run at the same time within the world, and multiple games can be run.
 
 #### Systems
-
+the `aution_systems` contract has 3 systems:
+- `start`: responsible for starting the auction
 - `buy`: responsible for buying the VRGDA
-- `start_auction`: responsible for starting the auction
 - `view_price`: responsible for viewing the price of the auction
 
 
