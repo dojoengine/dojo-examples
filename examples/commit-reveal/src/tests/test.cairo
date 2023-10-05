@@ -42,10 +42,6 @@ fn setup() -> (IWorldDispatcher, ICommitRevealDispatcher) {
     // deploy executor, world and register models/systems
     let world = spawn_test_world(models);
 
-    // world.grant_writer('Game', 'create_game');
-    // world.grant_writer('Game', 'reveal_val/ worldwriter('Statement', 'commit_value');
- // world.grant_writer('Statement', 'reveal_valet uuidd.uuid(); // consume uuid 0
-
     let uuid = world.uuid(); // consume uuid 0
 
     // deloy CommitReveal contract
