@@ -1,5 +1,5 @@
 #[system]
-mod ItemActions {
+mod item_action_systems {
     use starknet::{ContractAddress, get_caller_address};
 
     use dojo_erc::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};

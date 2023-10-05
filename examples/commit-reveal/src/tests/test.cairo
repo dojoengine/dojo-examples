@@ -10,7 +10,11 @@ use dojo::test_utils::spawn_test_world;
 use commit_reveal::models::{game, Game};
 use commit_reveal::models::{statement, Statement};
 use commit_reveal::models::{Choice};
-use commit_reveal::systems::{CommitReveal, ICommitRevealDispatcher, ICommitRevealDispatcherTrait};
+use commit_reveal::systems::{
+    commit_reveal_systems, 
+    ICommitRevealSystemsDispatcher, 
+    ICommitRevealSystemsDispatcherTrait
+};
 
 use core::pedersen::pedersen;
 use core::debug::PrintTrait;
@@ -35,7 +39,7 @@ fn impersonate(address: ContractAddress) {
 
 //
 
-fn setup() -> (IWorldDispatcher, ICommitRevealDispatcher) {
+fn setup() -> (IWorldDispatcher, ICommitRevealSystemsDispatcher) {
     // models
     let mut models = array![game::TEST_CLASS_HASH, statement::TEST_CLASS_HASH];
 
@@ -46,10 +50,10 @@ fn setup() -> (IWorldDispatcher, ICommitRevealDispatcher) {
 
     // deloy CommitReveal contract
     let (game_contract_address, _) = deploy_syscall(
-            CommitReveal::TEST_CLASS_HASH.try_into().unwrap(),
+            commit_reveal_systems::TEST_CLASS_HASH.try_into().unwrap(),
             0, array![].span(), false
         ).unwrap();
-    let game_contract = ICommitRevealDispatcher { contract_address: game_contract_address };
+    let game_contract = ICommitRevealSystemsDispatcher { contract_address: game_contract_address };
 
     (world, game_contract)
 }
@@ -375,7 +379,7 @@ fn test_game_cannot_reveal_without_opponent_commit() {
 
 fn simulate_game(
     world: IWorldDispatcher,
-    game_contract: ICommitRevealDispatcher,
+    game_contract: ICommitRevealSystemsDispatcher,
     game_id: u32,
     player1: ContractAddress,
     player1_secret: felt252,

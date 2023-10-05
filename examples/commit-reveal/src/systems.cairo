@@ -2,7 +2,7 @@ use dojo::world::IWorldDispatcher;
 use starknet::ContractAddress;
 
 #[starknet::interface]
-trait ICommitReveal<TContractState> {
+trait ICommitRevealSystems<TContractState> {
     fn create_game(self: @TContractState, world: IWorldDispatcher, player1: ContractAddress, player2: ContractAddress) -> u32;
     fn commit_value(self: @TContractState, world: IWorldDispatcher, game_id: u32, commit_value: felt252);
     fn reveal_value(self: @TContractState, world: IWorldDispatcher, game_id: u32, reveal_value: felt252, reveal_secret: felt252);
@@ -10,7 +10,7 @@ trait ICommitReveal<TContractState> {
 
 
 #[system]
-mod CommitReveal {
+mod commit_reveal_systems {
     use commit_reveal::models::{Game, Statement, Choice, StatementTrait};
     use commit_reveal::models::{IntoFelt252Choice, TryIntoChoiceFelt252};
     use commit_reveal::utils::get_winner;

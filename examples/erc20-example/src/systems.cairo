@@ -1,5 +1,5 @@
 #[system]
-mod ShipActions {
+mod ship_strategy_systems {
     use starknet::ContractAddress;
     use zeroable::Zeroable;
 
