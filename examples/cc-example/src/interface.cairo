@@ -30,4 +30,5 @@ trait ICryptsAndCaverns<TState> {
 
     fn get_seed(token_id: u128) -> u256;
 
+    fn mint(ref self: TState) -> u128;
 }
