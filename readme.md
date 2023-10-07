@@ -17,6 +17,7 @@ cp -r examples/example-scaffold examples/<example name>
 - [ ] ERC20 integration
 - [ ] ERC721 integration
 - [ ] ERC1155 integration
+- [ ] C&C integration
 - [ ] AMM Constant Product
 - [ ] VRGDA
 - [ ] Simplex integration
