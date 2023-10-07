@@ -1,4 +1,4 @@
-> This example is not a complete or fully functional implementation of the game. Instead, it is a basic demonstration that illustrates how to integrate the submitted reveal scheme into the game world.
+> This example is not a complete or fully functional implementation of the game. Instead, it is a basic demonstration that illustrates how to integrate C&C (Command and Control) into the game world.
 
 # crypts and caverns example
 A simple game example
