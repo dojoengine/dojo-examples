@@ -12,10 +12,10 @@ Systems:
 Movement
 Split into several stages:
 
-Parsing CC map data using Cairo, which can depend on the CC library
-Implementing new map generation based on the CC library, without using the mint form
-Allowing the player to move on the map and interact with local katana
-Implementing points of interest and teleportation points
+- Parsing CC map data using Cairo, which can depend on the CC library
+- Implementing new map generation based on the CC library, without using the mint form
+- Allowing the player to move on the map and interact with local katana
+- Implementing points of interest and teleportation points
 
 ## how to build
 scarb build
