@@ -25,7 +25,6 @@ mod ship_strategy_systems {
 
         // If the attacker hit one of the defender ships we transfer one erc20 token.
         if defender_ship.x == x && defender_ship.y == y {
-
             // The ERC20 system is invoked here.
             let token = IERC20Dispatcher { contract_address: erc20_address };
             assert(token.transfer_from(defender, attacker, ONE_TOKEN), 'transfer failed');

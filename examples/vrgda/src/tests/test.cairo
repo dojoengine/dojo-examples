@@ -9,34 +9,32 @@ mod test {
 
     // project imports
     use example_vrgda::models::{
-        gold_balance, GoldBalance, 
-        item_balance, ItemBalance,  
-        auction, Auction 
+        gold_balance, GoldBalance, item_balance, ItemBalance, auction, Auction
     };
 
     use example_vrgda::systems::aution_systems;
-    use example_vrgda::systems::{
-        IAuctionSystemsDispatcher,
-        IAuctionSystemsDispatcherTrait
-    };
+    use example_vrgda::systems::{IAuctionSystemsDispatcher, IAuctionSystemsDispatcherTrait};
 
     use core::traits::TryInto;
     use core::option::OptionTrait;
 
     fn setup() -> (IWorldDispatcher, IAuctionSystemsDispatcher) {
-
         // deploy executor, and get world
-        let world: IWorldDispatcher = spawn_test_world(array![]);
+        let world: IWorldDispatcher = spawn_test_world(
+            array![
+                gold_balance::TEST_CLASS_HASH,
+                item_balance::TEST_CLASS_HASH,
+                auction::TEST_CLASS_HASH
+            ]
+        );
 
         // deploy the auction_systems contract and get
         // the contract address
-        let (auction_systems_contract_address, _) 
-            = deploy_syscall(
-                aution_systems::TEST_CLASS_HASH.try_into().unwrap(), 
-                0, array![].span(), false
-            ).unwrap();
+        let (auction_systems_contract_address, _) = deploy_syscall(
+            aution_systems::TEST_CLASS_HASH.try_into().unwrap(), 0, array![].span(), false
+        )
+            .unwrap();
 
-        
         // connect the contract address to its dispatcher so that
         // we can use it to call contract methods/functions
         let auction_systems_contract = IAuctionSystemsDispatcher {
@@ -44,8 +42,6 @@ mod test {
         };
 
         (world, auction_systems_contract)
-
-
     }
 
     #[test]
@@ -63,23 +59,18 @@ mod test {
         starknet::testing::set_block_timestamp(1);
 
         // start auction
-        auction_systems_contract.start(
-            world, game_id, item_id
-        );
+        auction_systems_contract.start(world, game_id, item_id);
 
         // confirm that auction was started 
         let auction = get!(world, (game_id, item_id), (Auction));
         assert(auction.start_time == 1, 'should be 1');
 
         // buy from auction
-        auction_systems_contract.buy(
-            world, game_id, item_id, amount
-        );
+        auction_systems_contract.buy(world, game_id, item_id, amount);
 
         // confirm that sale was successful 
         let auction = get!(world, (game_id, item_id), (Auction));
         assert(auction.sold == 1, 'should be 1');
-
     }
 }
 

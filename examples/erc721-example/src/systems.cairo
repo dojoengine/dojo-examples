@@ -8,12 +8,8 @@ mod item_action_systems {
 
     #[external(v0)]
     fn claim(
-        self: @ContractState,
-        world: IWorldDispatcher, 
-        erc721_address: ContractAddress, 
-        item_id: u32
+        self: @ContractState, world: IWorldDispatcher, erc721_address: ContractAddress, item_id: u32
     ) {
-
         let claimant = get!(world, get_caller_address(), Player);
         let mut item = get!(world, item_id, Item);
 
@@ -24,7 +20,7 @@ mod item_action_systems {
 
         // we assume that the world initially owns all items and 
         // this contract is approved to spend them
-        let token = IERC721Dispatcher{contract_address: erc721_address};
+        let token = IERC721Dispatcher { contract_address: erc721_address };
         token.transfer_from(world.contract_address, claimant.address, item.minted);
 
         item.minted += 1;

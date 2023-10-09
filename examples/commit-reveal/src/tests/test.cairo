@@ -11,9 +11,7 @@ use commit_reveal::models::{game, Game};
 use commit_reveal::models::{statement, Statement};
 use commit_reveal::models::{Choice};
 use commit_reveal::systems::{
-    commit_reveal_systems, 
-    ICommitRevealSystemsDispatcher, 
-    ICommitRevealSystemsDispatcherTrait
+    commit_reveal_systems, ICommitRevealSystemsDispatcher, ICommitRevealSystemsDispatcherTrait
 };
 
 use core::pedersen::pedersen;
@@ -50,9 +48,9 @@ fn setup() -> (IWorldDispatcher, ICommitRevealSystemsDispatcher) {
 
     // deloy CommitReveal contract
     let (game_contract_address, _) = deploy_syscall(
-            commit_reveal_systems::TEST_CLASS_HASH.try_into().unwrap(),
-            0, array![].span(), false
-        ).unwrap();
+        commit_reveal_systems::TEST_CLASS_HASH.try_into().unwrap(), 0, array![].span(), false
+    )
+        .unwrap();
     let game_contract = ICommitRevealSystemsDispatcher { contract_address: game_contract_address };
 
     (world, game_contract)
@@ -68,7 +66,6 @@ fn test_setup() {
 #[available_gas(600000000)]
 fn test_create_game() {
     let (world, game_contract) = setup();
-
 
     impersonate(PLAYER1());
 
@@ -148,12 +145,10 @@ fn test_game_with_even_result() {
 #[test]
 #[available_gas(600000000)]
 fn test_game_with_even_result_then_replay() {
-    
     let (world, game_contract) = setup();
 
     // admin create game
     let game_id = game_contract.create_game(world, PLAYER1(), PLAYER2());
-
 
     // round 1 is even
     simulate_game(
@@ -200,7 +195,6 @@ fn test_game_with_cheater_bad_commit() {
     // admin create game
     let game_id = game_contract.create_game(world, PLAYER1(), PLAYER2());
 
-
     // player1 commit
     impersonate(PLAYER1());
 
@@ -240,7 +234,6 @@ fn test_game_with_cheater_bad_reveal_value() {
     // admin create game
     let game_id = game_contract.create_game(world, PLAYER1(), PLAYER2());
 
-
     // player1 commit
     impersonate(PLAYER1());
 
@@ -277,7 +270,6 @@ fn test_game_with_cheater_bad_reveal_secret() {
 
     // admin create game
     let game_id = game_contract.create_game(world, PLAYER1(), PLAYER2());
-
 
     // player1 commit
     impersonate(PLAYER1());
@@ -331,13 +323,12 @@ fn test_game_cannot_commit_twice() {
 
 #[test]
 #[available_gas(600000000)]
-#[should_panic( expected: ('invalid player', 'ENTRYPOINT_FAILED'))]
+#[should_panic(expected: ('invalid player', 'ENTRYPOINT_FAILED'))]
 fn test_game_non_in_game_players_cant_commit() {
     let (world, game_contract) = setup();
 
     // admin create game
     let game_id = game_contract.create_game(world, PLAYER1(), PLAYER2());
-
 
     // admin try to commit
     impersonate(ZERO());
@@ -351,13 +342,12 @@ fn test_game_non_in_game_players_cant_commit() {
 
 #[test]
 #[available_gas(600000000)]
-#[should_panic( expected: ('waiting opponent commit', 'ENTRYPOINT_FAILED'))]
+#[should_panic(expected: ('waiting opponent commit', 'ENTRYPOINT_FAILED'))]
 fn test_game_cannot_reveal_without_opponent_commit() {
     let (world, game_contract) = setup();
 
     // admin create game
     let game_id = game_contract.create_game(world, PLAYER1(), PLAYER2());
-
 
     // player1 commit
     impersonate(PLAYER1());

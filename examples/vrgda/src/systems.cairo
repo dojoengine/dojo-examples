@@ -4,8 +4,12 @@ use dojo::world::IWorldDispatcher;
 #[starknet::interface]
 trait IAuctionSystems<TContractState> {
     fn start(self: @TContractState, world: IWorldDispatcher, game_id: u64, item_id: u128);
-    fn buy(self: @TContractState, world: IWorldDispatcher, game_id: u64, item_id: u128, amount: u128);
-    fn view_price(self: @TContractState, world: IWorldDispatcher, game_id: u64, item_id: u128, amount: u128) -> Fixed;
+    fn buy(
+        self: @TContractState, world: IWorldDispatcher, game_id: u64, item_id: u128, amount: u128
+    );
+    fn view_price(
+        self: @TContractState, world: IWorldDispatcher, game_id: u64, item_id: u128, amount: u128
+    ) -> Fixed;
 }
 
 #[system]
@@ -13,9 +17,9 @@ mod aution_systems {
     use example_vrgda::models::{Auction, AuctionTrait, GoldBalance};
 
     use cubit::f128::types::fixed::{Fixed, FixedTrait};
-    
+
     use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA, LogisticVRGDATrait};
-    
+
     use starknet::{ContractAddress, get_block_timestamp, get_caller_address};
 
     const TARGET_PRICE: u128 = 1000;
@@ -26,10 +30,7 @@ mod aution_systems {
 
     #[external(v0)]
     impl AuctionSystemsImpl of super::IAuctionSystems<ContractState> {
-        fn start(
-            self: @ContractState, world: IWorldDispatcher, 
-            game_id: u64, item_id: u128
-        ) {
+        fn start(self: @ContractState, world: IWorldDispatcher, game_id: u64, item_id: u128) {
             // todo: check if auction already exists
             // todo: check game exists
 
@@ -51,8 +52,7 @@ mod aution_systems {
 
 
         fn buy(
-            self: @ContractState, world: IWorldDispatcher, 
-            game_id: u64, item_id: u128, amount: u128
+            self: @ContractState, world: IWorldDispatcher, game_id: u64, item_id: u128, amount: u128
         ) {
             let mut auction = get!(world, (game_id, item_id), Auction);
             let mut player_balance = get!(world, (game_id, get_caller_address()), GoldBalance);
@@ -77,10 +77,8 @@ mod aution_systems {
         }
 
 
-
         fn view_price(
-            self: @ContractState, world: IWorldDispatcher, 
-            game_id: u64, item_id: u128, amount: u128
+            self: @ContractState, world: IWorldDispatcher, game_id: u64, item_id: u128, amount: u128
         ) -> Fixed {
             let mut auction = get!(world, (game_id, item_id), Auction);
 

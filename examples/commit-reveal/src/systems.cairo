@@ -3,9 +3,22 @@ use starknet::ContractAddress;
 
 #[starknet::interface]
 trait ICommitRevealSystems<TContractState> {
-    fn create_game(self: @TContractState, world: IWorldDispatcher, player1: ContractAddress, player2: ContractAddress) -> u32;
-    fn commit_value(self: @TContractState, world: IWorldDispatcher, game_id: u32, commit_value: felt252);
-    fn reveal_value(self: @TContractState, world: IWorldDispatcher, game_id: u32, reveal_value: felt252, reveal_secret: felt252);
+    fn create_game(
+        self: @TContractState,
+        world: IWorldDispatcher,
+        player1: ContractAddress,
+        player2: ContractAddress
+    ) -> u32;
+    fn commit_value(
+        self: @TContractState, world: IWorldDispatcher, game_id: u32, commit_value: felt252
+    );
+    fn reveal_value(
+        self: @TContractState,
+        world: IWorldDispatcher,
+        game_id: u32,
+        reveal_value: felt252,
+        reveal_secret: felt252
+    );
 }
 
 
