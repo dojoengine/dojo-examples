@@ -1,46 +1,76 @@
 #[cfg(test)]
 mod test {
-    use debug::PrintTrait;
-
     // dojo core imports
     use dojo::world::{IWorldDispatcherTrait, IWorldDispatcher};
     use dojo::test_utils::spawn_test_world;
 
+    // starknet imports
+    use starknet::syscalls::deploy_syscall;
+
     // project imports
-    use example_vrgda::components::{
-        gold_balance, GoldBalance, ItemBalance, item_balance, Auction, auction
+    use example_vrgda::models::{
+        gold_balance, GoldBalance, item_balance, ItemBalance, auction, Auction
     };
-    use example_vrgda::systems::{buy, start_auction};
 
-    fn setup() -> IWorldDispatcher {
-        // components
-        let mut components = array![
-            gold_balance::TEST_CLASS_HASH, item_balance::TEST_CLASS_HASH, auction::TEST_CLASS_HASH
-        ];
+    use example_vrgda::systems::aution_systems;
+    use example_vrgda::systems::{IAuctionSystemsDispatcher, IAuctionSystemsDispatcherTrait};
 
-        // // systems
-        let mut systems = array![buy::TEST_CLASS_HASH, start_auction::TEST_CLASS_HASH];
+    use core::traits::TryInto;
+    use core::option::OptionTrait;
 
-        // deploy executor, world and register components/systems
-        spawn_test_world(components, systems)
+    fn setup() -> (IWorldDispatcher, IAuctionSystemsDispatcher) {
+        // deploy executor, and get world
+        let world: IWorldDispatcher = spawn_test_world(
+            array![
+                gold_balance::TEST_CLASS_HASH,
+                item_balance::TEST_CLASS_HASH,
+                auction::TEST_CLASS_HASH
+            ]
+        );
+
+        // deploy the auction_systems contract and get
+        // the contract address
+        let (auction_systems_contract_address, _) = deploy_syscall(
+            aution_systems::TEST_CLASS_HASH.try_into().unwrap(), 0, array![].span(), false
+        )
+            .unwrap();
+
+        // connect the contract address to its dispatcher so that
+        // we can use it to call contract methods/functions
+        let auction_systems_contract = IAuctionSystemsDispatcher {
+            contract_address: auction_systems_contract_address
+        };
+
+        (world, auction_systems_contract)
     }
 
     #[test]
     #[available_gas(600000000)]
-    fn test_start() {
-        let mut world = setup();
+    fn test_start_and_buy() {
+        let (world, auction_systems_contract) = setup();
 
         let game_id = 1;
         let item_id = 1;
         let amount = 1;
 
-        world.execute('start_auction', array![game_id, item_id]);
+        // change block timestamp to 1 because the initial 
+        // value is 0. This will then be checked to ensure
+        // that the auction was started
+        starknet::testing::set_block_timestamp(1);
 
-        let auctions = get!(world, (game_id, item_id), (Auction));
+        // start auction
+        auction_systems_contract.start(world, game_id, item_id);
 
-        auctions.sold.print();
+        // confirm that auction was started 
+        let auction = get!(world, (game_id, item_id), (Auction));
+        assert(auction.start_time == 1, 'should be 1');
 
-        world.execute('buy', array![game_id, item_id, amount]);
+        // buy from auction
+        auction_systems_contract.buy(world, game_id, item_id, amount);
+
+        // confirm that sale was successful 
+        let auction = get!(world, (game_id, item_id), (Auction));
+        assert(auction.sold == 1, 'should be 1');
     }
 }
 

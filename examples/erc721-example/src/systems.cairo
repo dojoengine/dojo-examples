@@ -1,23 +1,29 @@
 #[system]
-mod claim_item {
-    use starknet::ContractAddress;
+mod item_action_systems {
+    use starknet::{ContractAddress, get_caller_address};
 
-    use dojo::world::Context;
-    use dojo_erc::erc721::systems::ERC721Mint;
+    use dojo_erc::token::erc721::interface::{IERC721Dispatcher, IERC721DispatcherTrait};
 
-    use erc721_example::components::{Player, Item};
+    use erc721_example::models::{Player, Item};
 
-    fn execute(ctx: Context, claimant: Player, mut item: Item) {
-        // If the claiming player has enough exp the item's token can be minted.
+    #[external(v0)]
+    fn claim(
+        self: @ContractState, world: IWorldDispatcher, erc721_address: ContractAddress, item_id: u32
+    ) {
+        let claimant = get!(world, get_caller_address(), Player);
+        let mut item = get!(world, item_id, Item);
+
+        // confirm that claimant has enough exp
         assert(claimant.exp_points >= item.exp_required, 'Not enough exp');
 
-        let calldata: Array<felt252> = array![
-            item.address.into(), (item.minted + 1).into(), claimant.address.into()
-        ];
-        // The ERC721 system is invoked here.
-        ctx.world.execute('ERC721Mint', calldata);
-        // Update the item component.
+        // transfer nft to claimant
+
+        // we assume that the world initially owns all items and 
+        // this contract is approved to spend them
+        let token = IERC721Dispatcher { contract_address: erc721_address };
+        token.transfer_from(world.contract_address, claimant.address, item.minted);
+
         item.minted += 1;
-        set!(ctx.world, (item));
+        set!(world, (item));
     }
 }

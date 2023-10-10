@@ -1,8 +1,12 @@
-use starknet::ContractAddress;
 use dojo_defi::dutch_auction::vrgda::{LogisticVRGDA};
+use dojo_defi::market::models::SchemaIntrospectionFixed;
+
 use cubit::f128::types::fixed::{Fixed, FixedTrait};
 
-#[derive(Component, Copy, Drop, Serde)]
+use starknet::ContractAddress;
+
+
+#[derive(Model, Copy, Drop, Serde)]
 struct GoldBalance {
     #[key]
     game_id: u64,
@@ -11,7 +15,7 @@ struct GoldBalance {
     balance: u32,
 }
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct ItemBalance {
     #[key]
     game_id: u64,
@@ -22,7 +26,7 @@ struct ItemBalance {
     balance: u32,
 }
 
-#[derive(Component, Copy, Drop, Serde)]
+#[derive(Model, Copy, Drop, Serde)]
 struct Auction {
     #[key]
     game_id: u64,
@@ -46,17 +50,5 @@ impl ImplAuction of AuctionTrait {
         let time_scale = self.time_scale;
 
         LogisticVRGDA { target_price, decay_constant, max_sellable, time_scale }
-    }
-}
-
-impl StorageSizeFixed of dojo::StorageSize<Fixed> {
-    #[inline(always)]
-    fn unpacked_size() -> usize {
-        2
-    }
-
-    #[inline(always)]
-    fn packed_size() -> usize {
-        129
     }
 }

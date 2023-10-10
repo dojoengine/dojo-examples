@@ -10,7 +10,7 @@ Players are set against each other on a virtual sea grid, deploying a fleet of s
 #### How it Works: A Step-by-Step Guide
 1. **Initialization:** Each player places their ships on the grid. The game is now ready to begin, and the ERC20 tokens are prepared for transfer through dojo's ERC20 crate.
 2. **Attack System:** On a player's turn, they call the attack system, submitting the coordinates (x, y) of their attack.
-   - **Successful Attack:** If the chosen coordinates correspond to a defender's ship position, the attacker will receive 1 ERC20 token with a precision of 18 decimals. The defender's Ships and Fleet components will be updated accordingly to reflect the damage.
+   - **Successful Attack:** If the chosen coordinates correspond to a defender's ship position, the attacker will receive 1 ERC20 token with a precision of 18 decimals. The defender's Ships and Fleet models will be updated accordingly to reflect the damage.
    - **Unsuccessful Attack:** If the coordinates do not correspond to a ship, no tokens are transferred, and the game continues with the next player's turn.
 3. **Winning the Game:** The game continues until one player's entire fleet is sunk. The victorious player will have accumulated ERC20 tokens throughout the game, reflecting their strategic prowess.
 
