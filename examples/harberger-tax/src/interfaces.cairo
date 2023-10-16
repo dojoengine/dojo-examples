@@ -48,8 +48,8 @@ trait IHarbergerTaxSystems<TContractState> {
     /// # Panics
     ///
     /// Panics if the caller does not have permission to change the recipient.
-    fn change_tax_recepient(
-        self: @TContractState, world: IWorldDispatcher, new_recepient: ContractAddress
+    fn change_tax_recipient(
+        self: @TContractState, world: IWorldDispatcher, new_recipient: ContractAddress
     );
 
     /// Changes the tax admin address.

@@ -34,7 +34,7 @@ mod harberger_tax_systems {
 
             assert(new_tax_meta.id == TAX_META_ID, 'wrong meta id');
             assert(new_tax_meta.admin != Zeroable::zero(), 'admin is 0');
-            assert(new_tax_meta.recipient != Zeroable::zero(), 'recepient is 0');
+            assert(new_tax_meta.recipient != Zeroable::zero(), 'recipient is 0');
             assert(new_tax_meta.numerator != 0, 'numerator is 0');
             assert(new_tax_meta.denominator != 0, 'denominator is 0');
             assert(new_tax_meta.numerator <= new_tax_meta.denominator, 'incorrect fraction');
@@ -83,18 +83,18 @@ mod harberger_tax_systems {
         }
 
 
-        fn change_tax_recepient(
-            self: @ContractState, world: IWorldDispatcher, new_recepient: ContractAddress
+        fn change_tax_recipient(
+            self: @ContractState, world: IWorldDispatcher, new_recipient: ContractAddress
         ) {
             let mut tax_meta: TaxMeta = get!(world, TAX_META_ID, TaxMeta);
             let caller = starknet::get_caller_address();
 
             assert(tax_meta.admin == caller, 'permission denied');
 
-            tax_meta.recipient = new_recepient;
+            tax_meta.recipient = new_recipient;
             set!(world, (tax_meta));
 
-            emit!(world, TaxRecipientChanged { from: caller, to: new_recepient });
+            emit!(world, TaxRecipientChanged { from: caller, to: new_recipient });
         }
 
 
