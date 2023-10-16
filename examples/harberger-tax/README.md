@@ -1,0 +1,1 @@
+Heavily inspired by https://programtheblockchain.com/posts/2018/09/19/implementing-harberger-tax-deeds/#:~:text=Harberger%2Dtaxed%20tokens%20can%20be,to%20compute%20and%20collect%20taxes.
