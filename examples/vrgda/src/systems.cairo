@@ -12,7 +12,7 @@ trait IAuctionSystems<TContractState> {
     ) -> Fixed;
 }
 
-#[system]
+#[dojo::contract]
 mod aution_systems {
     use example_vrgda::models::{Auction, AuctionTrait, GoldBalance};
 

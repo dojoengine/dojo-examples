@@ -22,7 +22,7 @@ trait ICommitRevealSystems<TContractState> {
 }
 
 
-#[system]
+#[dojo::contract]
 mod commit_reveal_systems {
     use commit_reveal::models::{Game, Statement, Choice, StatementTrait};
     use commit_reveal::models::{IntoFelt252Choice, TryIntoChoiceFelt252};

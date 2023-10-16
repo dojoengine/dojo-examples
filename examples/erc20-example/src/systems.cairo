@@ -1,4 +1,4 @@
-#[system]
+#[dojo::contract]
 mod ship_strategy_systems {
     use starknet::ContractAddress;
     use zeroable::Zeroable;
