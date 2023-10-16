@@ -1,5 +1,5 @@
 use starknet::ContractAddress;
-   
+
 const TAX_META_ID: u128 = 0;
 
 #[derive(Model, Copy, Drop, Serde)]
@@ -24,7 +24,6 @@ struct Token {
 }
 
 
-
 #[derive(Model, Copy, Drop, Serde)]
 struct Account {
     #[key]
@@ -36,11 +35,9 @@ struct Account {
 
 #[generate_trait]
 impl AccountImpl of AccountTrait {
-    fn can_be_foreclosed(self: Account)-> bool {
-        (
-            self.balance == 0 && 
-            self.paid_thru < starknet::get_block_timestamp().into() && 
-            self.sum_of_prices > 0
-        )
-    } 
+    fn can_be_foreclosed(self: Account) -> bool {
+        (self.balance == 0
+            && self.paid_thru < starknet::get_block_timestamp().into()
+            && self.sum_of_prices > 0)
+    }
 }

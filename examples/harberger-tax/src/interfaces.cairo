@@ -1,9 +1,8 @@
-use harberger::models::TaxMeta; 
+use harberger::models::TaxMeta;
 use dojo::world::IWorldDispatcher;
 use starknet::ContractAddress;
-    
-trait IHarbergerTaxSystems<TContractState> {
 
+trait IHarbergerTaxSystems<TContractState> {
     /// Initializes the contract with a new tax metadata.
     ///
     /// It may only be called once and should be called immediately 
@@ -18,9 +17,14 @@ trait IHarbergerTaxSystems<TContractState> {
     /// # Panics
     ///
     /// Panics if the contract is already initialized or if any of the validation checks fail.
-    fn initialize(self: @TContractState, world: IWorldDispatcher, new_tax_meta: TaxMeta, token_ids: Array<u128>);
-    
-    
+    fn initialize(
+        self: @TContractState,
+        world: IWorldDispatcher,
+        new_tax_meta: TaxMeta,
+        token_ids: Array<u128>
+    );
+
+
     /// Mint tokens so that they may be used, bought and sold in the contract.
     ///
     /// # Arguments
@@ -44,8 +48,10 @@ trait IHarbergerTaxSystems<TContractState> {
     /// # Panics
     ///
     /// Panics if the caller does not have permission to change the recipient.
-    fn change_tax_recepient(self: @TContractState, world: IWorldDispatcher, new_recepient: ContractAddress);
-    
+    fn change_tax_recepient(
+        self: @TContractState, world: IWorldDispatcher, new_recepient: ContractAddress
+    );
+
     /// Changes the tax admin address.
     ///
     /// # Arguments
@@ -82,7 +88,7 @@ trait IHarbergerTaxSystems<TContractState> {
     ///
     /// Panics if the withdrawal amount is greater than the account balance or if the fund transfer fails.
     fn withdraw(self: @TContractState, world: IWorldDispatcher, amount: u128);
-    
+
     /// Calculates and returns the taxes due for a specific address.
     ///
     /// # Arguments
@@ -93,7 +99,9 @@ trait IHarbergerTaxSystems<TContractState> {
     /// # Returns
     ///
     /// The calculated taxes due for the specified address.
-    fn get_taxes_due(self: @TContractState, world: IWorldDispatcher, address: ContractAddress ) -> u128;
+    fn get_taxes_due(
+        self: @TContractState, world: IWorldDispatcher, address: ContractAddress
+    ) -> u128;
 
     /// Collects taxes owed by a specified address and updates account balances.
     ///
@@ -105,7 +113,9 @@ trait IHarbergerTaxSystems<TContractState> {
     /// # Returns
     ///
     /// `true` if the payer has sufficient funds to pay the taxes; `false` otherwise.
-    fn collect_taxes(self: @TContractState, world: IWorldDispatcher, address: ContractAddress) -> bool;
+    fn collect_taxes(
+        self: @TContractState, world: IWorldDispatcher, address: ContractAddress
+    ) -> bool;
 
 
     /// Forecloses a token, transferring ownership and resetting its price.
@@ -119,7 +129,6 @@ trait IHarbergerTaxSystems<TContractState> {
     ///
     /// Panics if the token cannot be foreclosed or if any validation checks fail.
     fn foreclose(self: @TContractState, world: IWorldDispatcher, token_id: u128);
-
 
 
     /// Buys a token from its current owner, updating account balances and token ownership.
@@ -137,6 +146,7 @@ trait IHarbergerTaxSystems<TContractState> {
     /// # Panics
     ///
     /// Panics if the maximum price is too low, the buyer has insufficient funds, or other conditions are not met.
-    fn buy(self: @TContractState, world: IWorldDispatcher, token_id: u128, max_price: u128, price: u128);
-
-} 
+    fn buy(
+        self: @TContractState, world: IWorldDispatcher, token_id: u128, max_price: u128, price: u128
+    );
+}
