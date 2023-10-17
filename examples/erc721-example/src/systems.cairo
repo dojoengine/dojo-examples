@@ -1,4 +1,4 @@
-#[system]
+#[dojo::contract]
 mod item_action_systems {
     use starknet::{ContractAddress, get_caller_address};
 
